@@ -23,6 +23,7 @@ from config import RAW_DIR, OANDA_KEY, OANDA_ACCOUNT, OANDA_ENV
 
 # Yahoo ticker format for forex: EURUSD=X
 YAHOO_PAIRS = {
+    # Forex pairs
     "EUR_USD": "EURUSD=X",
     "GBP_USD": "GBPUSD=X",
     "USD_JPY": "USDJPY=X",
@@ -37,6 +38,10 @@ YAHOO_PAIRS = {
     "AUD_JPY": "AUDJPY=X",
     "CHF_JPY": "CHFJPY=X",
     "EUR_CHF": "EURCHF=X",
+    # Commodities
+    "XAU_USD": "GC=F",       # Gold Futures (~= spot XAU/USD)
+    "XAG_USD": "SI=F",       # Silver Futures
+    "BTC_USD": "BTC-USD",    # Bitcoin
 }
 
 TIMEFRAMES_YAHOO = {
