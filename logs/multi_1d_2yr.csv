@@ -1,0 +1,5 @@
+pair,tf,total_return,buy_hold_return,sharpe,max_dd,win_rate,trades,exposure_pct
+EUR_USD,1d,11.97,9.01,0.97,-4.85,0.0,1,59.4
+USD_JPY,1d,6.14,1.14,0.57,-4.23,0.0,1,39.5
+GBP_USD,1d,1.79,7.97,0.16,-9.36,0.0,1,81.8
+USD_CHF,1d,-10.78,-13.8,-0.71,-16.75,0.0,1,75.2

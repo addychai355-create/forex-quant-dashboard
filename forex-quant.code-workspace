@@ -1,0 +1,26 @@
+{
+  "name": "Forex Quant Trading",
+  "folders": [
+    {
+      "path": "/Users/addysmacmini/forex-quant"
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "/Users/addysmacmini/forex-quant/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      ".venv": true
+    },
+    "notebook.lineNumbers": "on",
+    "jupyter.interactiveWindow.creationMode": "perFile"
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-toolsai.jupyter",
+      "ms-python.vscode-pylance"
+    ]
+  }
+}
