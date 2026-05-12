@@ -31,6 +31,7 @@ st.markdown("""
 
 # ─── Import strategy ───
 from strategies.xau_scalp import add_indicators_xau, generate_signals_xau, calculate_performance_xau
+from streamlit_autorefresh import st_autorefresh
 
 # ─── Fetch XAU/USD data directly ───
 def fetch_gold(tf="5m", days=3):
@@ -48,6 +49,9 @@ def fetch_gold(tf="5m", days=3):
 
 def format_price(v):
     return f"${v:,.2f}" if v == v else "—"
+
+# ─── Auto-refresh every 3 seconds ───
+st_autorefresh(interval=3000, key="goldrefresh", limit=None)
 
 # ─── Load & compute ───
 df = fetch_gold("5m", 3)
@@ -199,4 +203,4 @@ else:
 
 # ─── Footer ───
 st.markdown("---")
-st.markdown("<p style='text-align:center;color:#3D4048;font-size:0.6rem;'>Data: Yahoo Finance GC=F · Refresh page to update</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center;color:#3D4048;font-size:0.6rem;'>Data: Yahoo Finance GC=F · Live auto-refresh</p>", unsafe_allow_html=True)
