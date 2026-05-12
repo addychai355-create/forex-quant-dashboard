@@ -192,14 +192,11 @@ if not recent_signals.empty:
     hist["signal"] = hist["signal"].map({1: "🟢 BUY", -1: "🔴 SELL"})
     hist = hist.rename(columns={"time": "T", "close": "Price", "signal": "Sig", "exit_reason": "Exit"})
     hist["Exit"] = hist["Exit"].replace("", "—")
-    st.dataframe(hist, use_container_width=True, hide_index=True, height=200)
+    st.dataframe(hist, width="stretch", hide_index=True, height=200)
 else:
     st.markdown("---")
     st.markdown("<p style='color:#9E9E9E;font-size:0.7rem;text-align:center;'>No signals generated in recent data.</p>", unsafe_allow_html=True)
 
 # ─── Footer ───
 st.markdown("---")
-st.markdown("<p style='text-align:center;color:#3D4048;font-size:0.6rem;'>Auto-refresh every 60s · Data: Yahoo Finance GC=F</p>", unsafe_allow_html=True)
-
-# Auto-refresh every 60s
-st.rerun()
+st.markdown("<p style='text-align:center;color:#3D4048;font-size:0.6rem;'>Data: Yahoo Finance GC=F · Refresh page to update</p>", unsafe_allow_html=True)
