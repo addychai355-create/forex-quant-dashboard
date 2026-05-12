@@ -47,7 +47,13 @@ st.markdown("""
 st.sidebar.title("🥇 XAU Scalp Monitor")
 st.sidebar.markdown("---")
 
-pair = st.sidebar.selectbox("Instrument", AVAILABLE_PAIRS, index=AVAILABLE_PAIRS.index("XAU_USD"))
+# Build pair list with XAU/USD first (avoids import edge case on Streamlit Cloud)
+ALL_PAIRS = list(AVAILABLE_PAIRS)
+if "XAU_USD" not in ALL_PAIRS:
+    ALL_PAIRS = ["XAU_USD"] + ALL_PAIRS
+display_pairs = {p: p.replace("_", "/") for p in ALL_PAIRS}
+pair = st.sidebar.selectbox("Instrument", ALL_PAIRS, index=ALL_PAIRS.index("XAU_USD"),
+                           format_func=lambda x: display_pairs.get(x, x))
 
 tf_options = {"1m": "1 Min", "5m": "5 Min", "15m": "15 Min", "30m": "30 Min",
               "1h": "1 Hour", "4h": "4 Hour", "1d": "1 Day"}
