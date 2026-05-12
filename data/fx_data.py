@@ -22,8 +22,8 @@ from config import RAW_DIR, OANDA_KEY, OANDA_ACCOUNT, OANDA_ENV
 # ──────────────────────────────────────────────
 
 # Yahoo ticker format for forex: EURUSD=X
+# Gold/silver use futures tickers (GC=F, SI=F) — mapped directly in get_yahoo_data
 YAHOO_PAIRS = {
-    # Forex pairs
     "EUR_USD": "EURUSD=X",
     "GBP_USD": "GBPUSD=X",
     "USD_JPY": "USDJPY=X",
@@ -38,8 +38,7 @@ YAHOO_PAIRS = {
     "AUD_JPY": "AUDJPY=X",
     "CHF_JPY": "CHFJPY=X",
     "EUR_CHF": "EURCHF=X",
-    # Commodities
-    "XAU_USD": "GC=F",       # Gold Futures (~= spot XAU/USD)
+    "XAU_USD": "GC=F",       # Gold Futures
     "XAG_USD": "SI=F",       # Silver Futures
     "BTC_USD": "BTC-USD",    # Bitcoin
 }
@@ -65,7 +64,9 @@ def get_yahoo_data(
     """
     import yfinance as yf
 
-    ticker = YAHOO_PAIRS.get(pair, pair.replace("_", "") + "=X")
+    # Hard-coded commodity tickers (bypass potential YAHOO_PAIRS mismatches on Streamlit Cloud)
+    _COMMODITY_TICKERS = {"XAU_USD": "GC=F", "XAG_USD": "SI=F", "BTC_USD": "BTC-USD"}
+    ticker = _COMMODITY_TICKERS.get(pair) or YAHOO_PAIRS.get(pair, pair.replace("_", "") + "=X")
     yahoo_tf = TIMEFRAMES_YAHOO.get(tf, tf)
     cache_file = RAW_DIR / f"yahoo_{ticker}_{tf}.parquet"
 

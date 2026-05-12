@@ -216,7 +216,7 @@ if data is not None:
                           margin=dict(l=0, r=0, t=30, b=0),
                           legend=dict(orientation="h", y=1.02, x=0))
         fig.update_xaxes(rangeslider_visible=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     with col2:
         perf = calculate_performance_xau(data) if is_gold else (
@@ -300,7 +300,7 @@ if data is not None:
 
     fig.update_layout(height=350, template="plotly_dark", hovermode="x unified",
                       margin=dict(l=0, r=0, t=10, b=0), legend=dict(orientation="h", y=1.02, x=0))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 st.markdown("---")
 
@@ -338,7 +338,7 @@ if data is not None:
             display_cols = ["Time", "Price", "RSI", "ATR%", "Signal"]
 
         st.markdown("**Recent candles & signals**")
-        st.dataframe(recent[display_cols], use_container_width=True, hide_index=True)
+        st.dataframe(recent[display_cols], width="stretch", hide_index=True)
 
     with col2:
         if is_gold and not data[data["signal"] != 0].empty:
@@ -364,7 +364,7 @@ if data is not None:
                 exit_display = exit_data[["time", "close", "exit_reason"]].tail(10).copy()
                 exit_display["time"] = exit_display["time"].dt.strftime("%H:%M")
                 exit_display = exit_display.rename(columns={"time": "Time", "close": "Price", "exit_reason": "Exit"})
-                st.dataframe(exit_display, use_container_width=True, hide_index=True)
+                st.dataframe(exit_display, width="stretch", hide_index=True)
             else:
                 st.info("No exits yet in recent data.")
         else:
