@@ -92,14 +92,35 @@ if auto_refresh:
     st.sidebar.info("🔄 Auto-refreshing...")
     st.rerun(60)
 
+def _fetch_commodity(pair, tf, days):
+    """Direct Yahoo fetch for commodities (bypass YAHOO_PAIRS issues on Streamlit Cloud)."""
+    import yfinance as yf
+    tickers = {"XAU_USD": "GC=F", "XAG_USD": "SI=F"}
+    yf_tf = {"1m":"1m","5m":"5m","15m":"15m","30m":"30m","1h":"60m","4h":"60m","1d":"1d"}
+    raw = yf.download(tickers[pair], period=f"{max(1,days)}d", interval=yf_tf.get(tf,"5m"), progress=False)
+    if raw is None or raw.empty:
+        return None
+    if isinstance(raw.columns, pd.MultiIndex):
+        raw.columns = raw.columns.get_level_values(0)
+    df = raw.reset_index()
+    df.columns = [c.lower().strip() for c in df.columns]
+    col_map = {"datetime":"time","dat":"time","date":"time",
+               "open":"open","high":"high","low":"low","close":"close","volume":"volume"}
+    df = df.rename(columns={k:v for k,v in col_map.items() if k in df.columns})
+    df["pair"] = pair
+    df["time"] = pd.to_datetime(df["time"])
+    return df.sort_values("time").reset_index(drop=True)
+
 # ─── Load Data ───
 @st.cache_data(ttl=120)
 def load_data(pr, tf_str, days):
-    df = get_forex_data(pr, tf_str, years_back=max(0.01, days/365), cache=True)
-    if df.empty or len(df) < 60:
+    if pr in ("XAU_USD", "XAG_USD"):
+        df = _fetch_commodity(pr, tf_str, days)
+    else:
+        df = get_forex_data(pr, tf_str, years_back=max(0.01, days/365), cache=True)
+    if df is None or df.empty or len(df) < 60:
         return None
-    # Use scalping strategy for gold, momentum for others
-    if "XAU" in pr or "XAG" in pr:
+    if pr in ("XAU_USD", "XAG_USD"):
         df = add_indicators_xau(df)
         df = generate_signals_xau(df, mom_threshold=mom_thresh, atr_sl_mult=sl_mult,
                                    atr_tp_mult=tp_mult, max_hold_bars=max_hold)
@@ -117,7 +138,10 @@ with st.spinner("Loading market data..."):
     cols = st.columns(len(key_pairs))
     for i, p in enumerate(key_pairs):
         try:
-            d = get_forex_data(p, "5m", 0.02, cache=True)
+            if p in ("XAU_USD", "XAG_USD"):
+                d = _fetch_commodity(p, "5m", 5)
+            else:
+                d = get_forex_data(p, "5m", 0.02, cache=True)
             if d is not None and len(d) > 2:
                 l = d.iloc[-1]; pv = d.iloc[-2]
                 chg = (l["close"] - pv["close"]) / pv["close"] * 100
