@@ -201,5 +201,5 @@ else:
 st.markdown("---")
 st.markdown("<p style='text-align:center;color:#3D4048;font-size:0.6rem;'>Auto-refresh every 60s · Data: Yahoo Finance GC=F</p>", unsafe_allow_html=True)
 
-# Auto-refresh
-st.rerun(60)
+# Auto-refresh every 60s
+st.rerun()
